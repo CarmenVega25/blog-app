@@ -1,21 +1,52 @@
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
-export default async function PostPage({ params }: { params: { slug: string } }) {
+export default async function PostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
   const { data: post } = await supabase
     .from('posts')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single()
 
-  if (!post) return <p className="p-8">Post not found.</p>
+  if (!post) return (
+    <main className="max-w-xl mx-auto px-8 py-12">
+      <p className="text-gray-500 italic">Post not found.</p>
+    </main>
+  )
 
   return (
-    <main className="max-w-2xl mx-auto p-8">
-      <Link href="/" className="text-sm text-gray-500 hover:underline mb-8 block">← Back</Link>
-      <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
-      <p className="text-gray-500 text-sm mb-8">{post.created_at?.slice(0, 10)}</p>
-      <div className="leading-relaxed whitespace-pre-wrap">{post.content}</div>
+    <main className="max-w-xl mx-auto px-8 py-12">
+
+      {/* Back link */}
+      <Link href="/" className="text-sm text-gray-500 hover:text-indigo-400 transition-colors duration-200 mb-10 block">
+        ← Back
+      </Link>
+
+      {/* Title */}
+      <h1 className="font-serif italic text-4xl font-bold text-white mb-3 leading-tight">
+        {post.title}
+      </h1>
+
+      {/* Date */}
+      <p className="text-gray-500 text-sm mb-10">
+        {new Date(post.created_at).toLocaleDateString('en-US', {
+          weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+        })}
+      </p>
+
+      {/* Divider */}
+      <div className="border-t border-gray-800 mb-10" />
+
+      {/* Body */}
+      <div className="text-gray-300 leading-8 whitespace-pre-wrap text-[1.05rem]">
+        {post.content}
+      </div>
+
     </main>
   )
 }

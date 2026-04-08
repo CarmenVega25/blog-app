@@ -28,33 +28,54 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="max-w-2xl mx-auto p-8">
-      <Link href="/" className="text-sm text-gray-500 hover:underline mb-8 block">← Back</Link>
-      <h1 className="text-3xl font-bold mb-8">New Post</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <main className="max-w-xl mx-auto px-8 py-12">
+
+      {/* Back link */}
+      <Link href="/" className="text-sm text-gray-500 hover:text-indigo-400 transition-colors duration-200 mb-10 block">
+        ← Back
+      </Link>
+
+      {/* Title */}
+      <h1 className="font-serif italic text-4xl font-bold text-white mb-10">
+        New Entry
+      </h1>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+
+        {/* Title input */}
         <input
-          className="border rounded p-2"
-          placeholder="Title"
+          className="bg-transparent border border-gray-700 focus:border-indigo-500 outline-none rounded-lg px-4 py-3 text-white placeholder-gray-600 transition-colors duration-200"
+          placeholder="Entry title..."
           value={title}
           onChange={e => setTitle(e.target.value)}
           required
         />
+
+        {/* Content textarea */}
         <textarea
-          className="border rounded p-2 h-64"
-          placeholder="Write your post here..."
+          className="bg-transparent border border-gray-700 focus:border-indigo-500 outline-none rounded-lg px-4 py-3 h-72 text-white placeholder-gray-600 leading-7 resize-none transition-colors duration-200"
+          placeholder="Write your entry here..."
           value={content}
           onChange={e => setContent(e.target.value)}
           required
         />
+
+        {/* Publish button */}
         <button
-          className="bg-black text-white rounded p-2 font-semibold disabled:opacity-50"
+          className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white font-semibold py-3 rounded-full transition-colors duration-200"
           type="submit"
           disabled={submitting}
         >
-          {submitting ? 'Saving...' : 'Publish'}
+          {submitting ? 'Saving...' : 'Publish Entry'}
         </button>
-        {saved && <p className="text-green-600">Post saved!</p>}
-        {error && <p className="text-red-500">{error}</p>}
+
+        {saved && (
+          <p className="text-center text-indigo-400 text-sm">✓ Entry saved!</p>
+        )}
+        {error && (
+          <p className="text-center text-red-400 text-sm">{error}</p>
+        )}
+
       </form>
     </main>
   )
